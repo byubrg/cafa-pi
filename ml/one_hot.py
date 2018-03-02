@@ -20,7 +20,7 @@ def one_hot_seq(seq, max_size=0):
     return np.array(temp)
 
 def read_csv(path):
-    print(path)
+    pass
 
     
 if __name__ == "__main__":
