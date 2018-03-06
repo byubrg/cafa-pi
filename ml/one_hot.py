@@ -22,9 +22,19 @@ def one_hot_seq(seq, max_size=0):
 def read_csv(path):
     pass
 
+def encode_functions(df, id_col="id", function_col="go_id"):
+    functions = sorted(list(set(df[function_col])))
+    func_dict = {func: i for i, func in enumerate(functions)}
+    ids = sorted(list(set(df[id_col])))
+    id_dict = {id_: i for i, id_ in enumerate(ids)}
+    encodings = np.zeros((len(ids), len(functions)))
+    for i, row in df.iterrows():
+        encodings[id_dict[row[id_col]], func_dict[row[function_col]]] = 1.0
+    return encodings
     
 if __name__ == "__main__":
-    print(one_hot("A"))
-    print(one_hot("M"))
-    print(one_hot_seq("ACDE", 6))
-    print(read_csv('cafa-pi/example/train.csv'))
+    df = pd.DataFrame({
+        "id": [1, 1, 2, 2, 2, 3, 4, 5, 5], 
+        "go_id": ["a", "b", "c", "d", "a", "d", "e", "a", "e"]
+    })
+    print(encode_functions(df))
