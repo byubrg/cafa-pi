@@ -23,10 +23,9 @@ def go_id_onehot(file_name, id_column="CAFA_ID", go_id_column="GO_ID"):
         one_hot[id] = hot_map
     return [go_ids, one_hot]
 
-def get_labels(one_hot):
+def get_labels(file_name):
+    one_hot = go_id_onehot(file_name)[2]
     labels = []
     for cafa_id in one_hot:
         labels.append(one_hot[cafa_id])
     return labels
-
-print(get_labels(go_id_onehot("/Users/kimballhill/BYUBRG/cafa-pi/data/example/train_fake.csv")[1]))
