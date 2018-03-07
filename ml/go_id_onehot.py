@@ -24,7 +24,7 @@ def go_id_onehot(file_name, id_column="CAFA_ID", go_id_column="GO_ID"):
     return [go_ids, one_hot]
 
 def get_labels(file_name):
-    one_hot = go_id_onehot(file_name)[2]
+    one_hot = go_id_onehot(file_name)[1]
     labels = []
     for cafa_id in one_hot:
         labels.append(one_hot[cafa_id])
