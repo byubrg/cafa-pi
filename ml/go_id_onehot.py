@@ -21,4 +21,4 @@ def go_id_onehot(file_name, id_column="CAFA_ID", go_id_column="GO_ID"):
             else:
                 hot_map += '0'
         one_hot[id] = hot_map
-    return one_hot
+    return [go_ids, one_hot]
