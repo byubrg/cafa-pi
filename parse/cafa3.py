@@ -12,12 +12,14 @@ def df_from_fasta(path):
         for line in infile:
             line = line.strip()
             if ">" in line:
+                # This means we have a new sequence
                 names.append(line[1:])
                 if seq != "":
                     seqs.append(seq)
                     seq = ""
             else:
                 seq += line
+        # Add the last sequence
         seqs.append(seq)
     df = pd.DataFrame({"CAFA_ID": names, "Sequence": seqs})
     df["Taxon_ID"] = path.split("/")[-1].split(".")[0]
