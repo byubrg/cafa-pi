@@ -1,22 +1,11 @@
 from sklearn.linear_model import perceptron
 import numpy as np
+import pandas as pd
+import one_hot as oh
 
-data = np.array([
-    [0., 1.],
-    [0.1, 0.9],
-    [-0.1, 1.1],
-    [1.0, 0.],
-    [0.9, 0.1],
-    [1.1, -0.1]
-])
-labels = np.array([
-    "a",
-    "a",
-    "a",
-    "b",
-    "b",
-    "b",
-])
+data, labels = oh.read_csv("../data/example/train_fake.csv")
+
+data = [np.array(row).flatten() for row in data]
 
 net = perceptron.Perceptron(max_iter=100, verbose=0, random_state=None, fit_intercept=True, eta0=0.002)
 net.fit(data, labels)

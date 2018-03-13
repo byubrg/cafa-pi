@@ -20,7 +20,12 @@ def one_hot_seq(seq, max_size=0):
     return np.array(temp)
 
 def read_csv(path):
-    pass
+    df = pd.read_csv(path)
+    seqs = [row['Sequence'] for _, row in df.iterrows()]
+    max_len = max([len(seq) for seq in seqs])
+    data_encodings = [one_hot_seq(seq, max_len) for seq in seqs]
+    targets = [row['GO_ID'] for _, row in df.iterrows()]
+    return data_encodings, targets
 
 def encode_functions(df, id_col="id", function_col="go_id"):
     functions = sorted(list(set(df[function_col])))
