@@ -1,6 +1,6 @@
 import pandas as pd
 import random
-from one_hot import AMINOS
+from .embeddings import AMINOS
 
 def generate_protein(min_len=25, max_len=50, insert=""):
     """

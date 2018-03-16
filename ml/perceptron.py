@@ -1,9 +1,9 @@
 from sklearn.linear_model import perceptron
 import numpy as np
 import pandas as pd
-import one_hot as oh
+import embeddings
 
-data, labels = oh.read_csv("../data/example/train_fake.csv")
+data, labels = embeddings.load_data_discrete("../data/example/train_fake.csv")
 
 data = [np.array(row).flatten() for row in data]
 

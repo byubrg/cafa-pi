@@ -13,7 +13,7 @@ The following Python packages are required:
 To install these packages with pip, run:
 
 ```bash
-pip3 install pandas
+pip3 install pandas tensorflow sklearn
 ```
 
 ## Teams:
@@ -55,3 +55,13 @@ python3 ml/simulate_data.py
 ```
 
 The data can then be found in `{project root}/data/example/train_simulated.csv`.
+
+## Loading the data
+
+In order to load a csv into a format usable by TensorFlow, run the following in Python:
+
+```python
+from ml.embeddings import load_data
+
+data, targets = load_data("./data/example/train_fake.csv")
+```
