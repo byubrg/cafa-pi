@@ -1,3 +1,5 @@
+# pylint: disable=E1101
+
 import numpy as np
 import pandas as pd
 
@@ -19,7 +21,7 @@ def one_hot_seq(seq, max_size=0):
             temp.append([0.0] * len(AMINOS))
     return np.array(temp)
 
-def load_data(path):
+def load_data_padded(path):
     """
     Load data and encode the sequences and targets as arrays of 1.0s and 0.0s.
     @param path: the file path to the csv to be read in.  Must have columns
@@ -35,8 +37,8 @@ def load_data(path):
             seen.add(seq)
             seqs.append(seq)
     max_len = max([len(seq) for seq in seqs])
-    data_encodings = [one_hot_seq(seq, max_len) for seq in seqs]
-    targets = get_labels(path)
+    data_encodings = np.array([one_hot_seq(seq, max_len) for seq in seqs])
+    targets = np.array(get_labels(path))
     return data_encodings, targets
 
 def load_data_discrete(path):
@@ -91,6 +93,17 @@ def get_labels(file_name):
     for cafa_id in one_hot:
         labels.append(np.array(one_hot[cafa_id]))
     return labels
+
+def shuffle_unison(data, labels):
+    assert len(data) == len(labels), \
+        "Data and Labels different sizes.  {} != {}".format(len(data), len(labels))
+    p = np.random.permutation(len(data))
+    return data[p], labels[p]
+
+def get_batch(data, labels, batch_size=25, shuffle=True):
+    if shuffle:
+        data, labels = shuffle_unison(data, labels)
+    return data[:batch_size], labels[:batch_size]
 
 if __name__ == "__main__":
     df = pd.DataFrame({
