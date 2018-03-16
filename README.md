@@ -43,3 +43,15 @@ To parse it, run the following from the project root:
 ```bash
 python3 parse/cafa3.py
 ```
+
+### Simulated data for testing
+
+This data isn't actually useful for training a model, but may be useful in testing whether a model works on very simple data.  The script's random seed is set so that this data will be the same each time it's generated.
+
+To generate the simulated data, run the following from the project root:
+
+```bash
+python3 ml/simulate_data.py
+```
+
+The data can then be found in `{project root}/data/example/train_simulated.csv`.
