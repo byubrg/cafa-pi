@@ -65,3 +65,11 @@ from ml.embeddings import load_data
 
 data, targets = load_data("./data/example/train_fake.csv")
 ```
+
+## Running the Model
+
+### CNN
+
+```bash
+python3 -m ml.cnn
+```
