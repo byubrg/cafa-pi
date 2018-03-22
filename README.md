@@ -68,6 +68,12 @@ data, targets = load_data("./data/example/train_fake.csv")
 
 ## Running the Model
 
+### Viewing results
+
+```bash
+tensorboard --logdir log/
+```
+
 ### CNN
 
 ```bash
