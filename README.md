@@ -74,6 +74,10 @@ data, targets = load_data("./data/example/train_fake.csv")
 tensorboard --logdir log/
 ```
 
+Then go to http://127.0.0.1:6006 in your browser to see the results.
+
+You may need to delete the `log/` directory before running the model a second time in order to clear old results.
+
 ### CNN
 
 ```bash
