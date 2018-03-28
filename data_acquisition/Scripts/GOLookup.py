@@ -24,17 +24,17 @@ if args.human_readable:
 	id = args.go_id
 	name =  parsed_json["results"][0]["name"]
 	definition = parsed_json["results"][0]["definition"]["text"]
-	print "GO ID:\n" ,'\t', id
-	print "Name:\n", '\t', name
-	print "Definition:\n", '\t', definition
+	print ("GO ID:\n" ,'\t', id)
+	print ("Name:\n", '\t', name)
+	print ("Definition:\n", '\t', definition)
 	try:
 		synonyms = parsed_json["results"][0]["synonyms"]
 	except:
 		synonyms = None
 	if synonyms:
-		print "Synonyms:"
+		print ("Synonyms:")
 		for e in synonyms:
-			print '\t', e["name"]
+			print ('\t', e["name"])
 		
 	#should be parsed_json["results"][0]["name"]
 else:
