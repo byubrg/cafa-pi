@@ -34,6 +34,20 @@ pip3 install pandas tensorflow sklearn
 
 ## Generating the parsed data
 
+### Target Data
+
+Download the data files:
+
+```bash
+bash data_acquisition/Scripts/download_test_data.sh
+```
+
+And parse them:
+
+```bash
+python parse/targets.py
+```
+
 ### Cafa 3
 
 The parsed data file is about 240 MB, so it's better to parse it on your own machine than to store in source control.
