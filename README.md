@@ -12,22 +12,6 @@ To install Python dependencies with pip, run:
 pip3 install pandas tensorflow sklearn
 ```
 
-## Teams:
-
-### Data acquisition
-
-- Ashton, Calvin, Dan
-
-### Data transformation
-
-- Dane, Dallas
-- Gage, Ben
-
-### Analytics
-
-- Kimball, Daniel
-- Jonathan, Erica
-
 ## Generating the parsed data
 
 ### Target Data
@@ -93,3 +77,19 @@ You may need to delete the `log/` directory before running the model a second ti
 ```bash
 python3 -m ml.cnn
 ```
+
+## Teams:
+
+### Data acquisition
+
+- Ashton, Calvin, Dan
+
+### Data transformation
+
+- Dane, Dallas
+- Gage, Ben
+
+### Analytics
+
+- Kimball, Daniel
+- Jonathan, Erica
