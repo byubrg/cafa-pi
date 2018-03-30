@@ -41,5 +41,5 @@ This directory contains 13 different fa files
 	  organisms. 2 are substrains
 
  candida_annots.cgd	
-This file contains the annots for all teh proteins here, with 298270
+This file contains the annots for all the proteins here, with 298270
 total GO annotations
