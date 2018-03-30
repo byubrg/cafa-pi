@@ -6,11 +6,7 @@ Code for the [CAFA PI challenge](https://www.synapse.org/#!Synapse:syn11533497/w
 
 All code, unless otherwise specified, runs with Python 3.
 
-The following Python packages are required:
-
-- [pandas](https://pandas.pydata.org/)
-
-To install these packages with pip, run:
+To install Python dependencies with pip, run:
 
 ```bash
 pip3 install pandas tensorflow sklearn
