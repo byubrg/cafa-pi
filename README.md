@@ -6,33 +6,27 @@ Code for the [CAFA PI challenge](https://www.synapse.org/#!Synapse:syn11533497/w
 
 All code, unless otherwise specified, runs with Python 3.
 
-The following Python packages are required:
-
-- [pandas](https://pandas.pydata.org/)
-
-To install these packages with pip, run:
+To install Python dependencies with pip, run:
 
 ```bash
 pip3 install pandas tensorflow sklearn
 ```
 
-## Teams:
-
-### Data acquisition
-
-- Ashton, Calvin, Dan
-
-### Data transformation
-
-- Dane, Dallas
-- Gage, Ben
-
-### Analytics
-
-- Kimball, Daniel
-- Jonathan, Erica
-
 ## Generating the parsed data
+
+### Target Data
+
+Download the data files:
+
+```bash
+bash data_acquisition/Scripts/download_test_data.sh
+```
+
+And parse them:
+
+```bash
+python parse/targets.py
+```
 
 ### Cafa 3
 
@@ -65,3 +59,37 @@ from ml.embeddings import load_data
 
 data, targets = load_data("./data/example/train_fake.csv")
 ```
+
+## Running the Model
+
+### Viewing results
+
+```bash
+tensorboard --logdir log/
+```
+
+Then go to http://127.0.0.1:6006 in your browser to see the results.
+
+You may need to delete the `log/` directory before running the model a second time in order to clear old results.
+
+### CNN
+
+```bash
+python3 -m ml.cnn
+```
+
+## Teams:
+
+### Data acquisition
+
+- Ashton, Calvin, Dan
+
+### Data transformation
+
+- Dane, Dallas
+- Gage, Ben
+
+### Analytics
+
+- Kimball, Daniel
+- Jonathan, Erica
