@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+import h5py
 
 AMINOS = 'ACDEFGHIKLMNPQRSTVWY'
 
@@ -106,6 +107,20 @@ def get_batch(data, labels, batch_size=25, shuffle=True):
     # if shuffle:
     #     data, labels = shuffle_unison(data, labels)
     # return data[:batch_size], labels[:batch_size]
+
+def get_batch_hdf5(file, batch_size=25):
+    with h5py.File(file, 'r') as f:
+        indices = np.random.choice(len(f['train']['attributes']), batch_size, replace=False)
+        return f['train']['attributes'][indices], f['train']['labels'][indices]
+
+def load_into_hdf5(in_file, out_file):
+    data, labels = load_data_discrete(in_file)
+    with h5py.File(out_file, "w") as f:
+        train = f.create_group('train')
+        test = f.create_group('test')
+        train.create_dataset('attributes', data=data)
+        train.create_dataset('labels', data=labels)
+
 
 if __name__ == "__main__":
     df = pd.DataFrame({
