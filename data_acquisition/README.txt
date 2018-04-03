@@ -11,9 +11,11 @@ Organism (taxon_subset_closure_label)
 Synonyms
 Type
 	bacteria_biofilm_annotation:
-		212 proteins from GO that have the biofilm annotation (GO:0042710) and are found in bacteria
+		212 proteins from GO that have the biofilm annotation
+(GO:0042710) and are found in bacteria
 	bacteria_motility_annotation.txt:
-		675 proteins from GO that have the motility Go annotation (GO:GO:0001539) and are found in bacteria
+		675 proteins from GO that have the motility Go annotation
+(GO:GO:0001539) and are found in bacteria
 
 
 
@@ -41,5 +43,5 @@ This directory contains 13 different fa files
 	  organisms. 2 are substrains
 
  candida_annots.cgd	
-This file contains the annots for all teh proteins here, with 298270
+This file contains the annots for all the proteins here, with 298270
 total GO annotations
