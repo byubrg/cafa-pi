@@ -118,7 +118,7 @@ def get_batch_hdf5(file, group, batch_size=25):
     """
     with h5py.File(file, 'r') as f:
         indices = np.random.choice(len(f[group]['attributes']), batch_size, replace=False)
-        return np.array(f[group]['attributes'])[indices], np.array(f['train']['labels'])[indices]
+        return np.array(f[group]['attributes'])[indices], np.array(f[group]['labels'])[indices]
 
 def load_into_hdf5(in_file, out_file):
     data, labels = load_data_padded(in_file)
