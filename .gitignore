@@ -3,3 +3,5 @@
 cafa3.csv
 train_simulated.csv
 log/
+data/large/
+target.*.csv

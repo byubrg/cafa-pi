@@ -101,9 +101,11 @@ def shuffle_unison(data, labels):
     return data[p], labels[p]
 
 def get_batch(data, labels, batch_size=25, shuffle=True):
-    if shuffle:
-        data, labels = shuffle_unison(data, labels)
-    return data[:batch_size], labels[:batch_size]
+    indices = np.random.choice(len(data), batch_size, replace=False)
+    return data[indices], labels[indices]
+    # if shuffle:
+    #     data, labels = shuffle_unison(data, labels)
+    # return data[:batch_size], labels[:batch_size]
 
 if __name__ == "__main__":
     df = pd.DataFrame({
