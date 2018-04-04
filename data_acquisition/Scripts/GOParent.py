@@ -16,10 +16,10 @@ mobile_list=set([ "GO:0060285","GO:0071973","GO:0060294","GO:0060295","GO:006029
 #return "na" if not biofilm or mobile child
 
 
-def get_parent (GO_term)
-    if (GO_term in mobile_list or GO_term == GO_mobile)
+def get_parent (GO_term):
+    if (GO_term in mobile_list or GO_term == GO_mobile):
         return GO_mobile
-    if (GO_term in biofilm_list or GO_term == GO_mobile)
+    if (GO_term in biofilm_list or GO_term == GO_mobile):
         return GO_biofilm
     return "na"
 
