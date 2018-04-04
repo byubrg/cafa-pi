@@ -4,7 +4,7 @@ import numpy as np
 def trim_go_id(go_id):
     return go_id.replace("GO:", "")
 
-def df_from_fasta(path):
+def df_from_fasta(path, taxon_id=None):
     names = []
     seqs = []
     seq = ""
@@ -22,7 +22,10 @@ def df_from_fasta(path):
         # Add the last sequence
         seqs.append(seq)
     df = pd.DataFrame({"CAFA_ID": names, "Sequence": seqs})
-    df["Taxon_ID"] = path.split("/")[-1].split(".")[0]
+    if taxon_id is None:
+        df["Taxon_ID"] = path.split("/")[-1].split(".")[0]
+    else:
+        df["Taxon_ID"] = taxon_id
     return df
 
 def df_from_tsv(path):
