@@ -11,9 +11,11 @@ Organism (taxon_subset_closure_label)
 Synonyms
 Type
 	bacteria_biofilm_annotation:
-		212 proteins from GO that have the biofilm annotation (GO:0042710) and are found in bacteria
+		212 proteins from GO that have the biofilm annotation
+(GO:0042710) and are found in bacteria
 	bacteria_motility_annotation.txt:
-		675 proteins from GO that have the motility Go annotation (GO:GO:0001539) and are found in bacteria
+		675 proteins from GO that have the motility Go annotation
+(GO:GO:0001539) and are found in bacteria
 
 
 
