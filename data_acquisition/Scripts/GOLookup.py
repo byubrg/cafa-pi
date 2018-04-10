@@ -21,21 +21,27 @@ def RetrieveGOData(goid, readable):
 		id = args.go_id
 		name =  parsed_json["results"][0]["name"]
 		definition = parsed_json["results"][0]["definition"]["text"]
-		print ("GO ID:\n" ,'\t', id)
-		print ("Name:\n", '\t', name)
-		print ("Definition:\n", '\t', definition)
+		outfile.write("GO ID:\n" ,'\t', id)
+		#print ("GO ID:\n" ,'\t', id)
+		outfile.write("Name:\n", '\t', name)
+		#print ("Name:\n", '\t', name)
+		outfile.write("Definition:\n", '\t', definition)
+		#print ("Definition:\n", '\t', definition)
 		try:
 			synonyms = parsed_json["results"][0]["synonyms"]
 		except:
 			synonyms = None
 		if synonyms:
-			print ("Synonyms:")
+			outfile.write("Synonyms:")
+			#print ("Synonyms:")
 			for e in synonyms:
-				print ('\t', e["name"])
+				outfile.write('\t', e["name"])
+			#	print ('\t', e["name"])
 			
 		#should be parsed_json["results"][0]["name"]
 	else:
-		print(r.text)
+		outfile.write(r.text)
+		#print(r.text)
 
 
 if __name__ == "__main__":
@@ -56,11 +62,21 @@ if __name__ == "__main__":
 			RetrieveGOData(goid, args.human_readable)
 			print()
 	if args.go_id_file:
+		outfile = open("json_data.txt", 'w')
+		counter = 0
 		with open(args.go_id_file, "r") as go_in:
 			for line in go_in:
+				counter+=1
+				if counter == 101:
+					break
+				print("Line: "+str(counter))
 				if "GO" in line:
 					RetrieveGOData(line.strip(), args.human_readable)
-					print()
+					outfile.write('\n')
+					#print()
 				else:
 					print("File in has invalid terms. Please try again")
 					sys.exit()
+				
+		go_in.close()
+		outfile.close()
