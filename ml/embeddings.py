@@ -128,6 +128,9 @@ class H5pyDao:
             self.num_train = self.num_samples - self.num_test
             self.test_indices = np.random.choice(self.num_samples, self.num_test, replace=False)
 
+    def cleanup(self):
+        os.remove(self.__path)
+
     def get_batch_train(self, batch_size: int=25):
         repeat = True
         indices = np.random.choice(self.num_samples, batch_size, replace=False)

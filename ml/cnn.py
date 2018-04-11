@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from .embeddings import load_data_padded, get_batch, shuffle_unison
+from .embeddings import load_data_padded, get_batch, shuffle_unison, H5pyDao
 import random
 
 tf.logging.set_verbosity(tf.logging.WARN)
@@ -28,27 +28,32 @@ if __name__ == "__main__":
         train_writer = tf.summary.FileWriter("log/train", sess.graph)
         test_writer = tf.summary.FileWriter("log/test", sess.graph)
         tf.global_variables_initializer().run()
-        data, labels = load_data_padded("./data/example/train_simulated.csv")
+        # data, labels = load_data_padded("./data/example/train_simulated.csv")
         
-        data, labels = shuffle_unison(data, labels)
-        split_point = int(0.9 * len(data))
-        data_train = data[:split_point]
-        labels_train = labels[:split_point]
-        data_test = data[split_point:]
-        labels_test = labels[split_point:]
+        # data, labels = shuffle_unison(data, labels)
+        # split_point = int(0.9 * len(data))
+        # data_train = data[:split_point]
+        # labels_train = labels[:split_point]
+        # data_test = data[split_point:]
+        # labels_test = labels[split_point:]
+        dao = H5pyDao("./data/example/train_simulated.h5", percent_test=10,
+                      csv_path="./data/example/train_simulated.csv")
         
         for i in range(1001):
-            batch_inputs, batch_targets = get_batch(data_train, labels_train)
+            # batch_inputs, batch_targets = get_batch(data_train, labels_train)
+            batch_inputs, batch_targets = dao.get_batch_train()
             summary, train_loss, _ = sess.run([merged, loss, optimizer], feed_dict={
                 inputs: batch_inputs,
                 targets: batch_targets,
             })
             train_writer.add_summary(summary, i)
             if i % 100 == 0:
-                batch_inputs, batch_targets = get_batch(data_test, labels_test)
+                # batch_inputs, batch_targets = get_batch(data_test, labels_test)
+                batch_inputs, batch_targets = dao.get_batch_test()
                 summary, test_loss = sess.run([merged, loss], feed_dict={
                     inputs: batch_inputs,
                     targets: batch_targets
                 })
                 test_writer.add_summary(summary, i)
                 print("Iteration {i}, test loss {mse}".format(i=i, mse=test_loss))
+    dao.cleanup()
