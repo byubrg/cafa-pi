@@ -4,7 +4,6 @@ import requests
 import argparse
 
 
-
 def RetrieveGOData(goid, readable):
 	pre_query = "https://www.ebi.ac.uk/QuickGO/services/ontology/go/terms/"
 	query_id = goid.replace(":", "%3A")

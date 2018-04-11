@@ -1,0 +1,4 @@
+--2018-04-03 14:35:22--  https://www.uniprot.org/uniprot/Q74G30.fasta
+Resolving www.uniprot.org... 128.175.240.211, 193.62.193.81
+Connecting to www.uniprot.org|128.175.240.211|:443... failed: Connection timed out.
+Connecting to www.uniprot.org|193.62.193.81|:443... slurmstepd: error: *** JOB 24086058 ON m7-12-3 CANCELLED AT 2018-04-03T14:37:13 ***

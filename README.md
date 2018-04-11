@@ -83,6 +83,7 @@ python3 -m ml.cnn
 ### Data acquisition
 
 - Ashton, Calvin, Dan
+
 #### 3/30/2018:
     So far we have collected all available protein data for Pseudemonas and the yeast, as well as GO annotations for these proteins.
     Summary statistics of these datasets are available in the README.txt file in the data_acquisition directory.
