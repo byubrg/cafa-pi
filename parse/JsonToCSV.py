@@ -40,7 +40,7 @@ def ListToCsv( myList, ofstream ):
 
 #################
 #######CONVERT JSON TO DICT
-#################3
+##################
 json_file = open("json_data.txt")
 json_str = json_file.readline()
 ofstream = open("GOIdInfo.csv", 'w')
