@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import re
 import sys
 import requests
 import argparse
@@ -44,7 +45,11 @@ def RetrieveGOData(goid, readable, l = False):
 			
 		#should be parsed_json["results"][0]["name"]
 	else:
-		print(r.text)
+		if l:
+			print_out = re.sub(r"(\"usage\":\"[^}]*\"}),({\"id\")", r"\1\n\2", str(r.text))
+			print(print_out)
+		else: 
+			print(r.text)
 
 
 if __name__ == "__main__":
