@@ -6,7 +6,7 @@
 # 3 synonyms if they exist
 
 
-
+import re
 import sys
 import json
 import csv 
@@ -17,12 +17,12 @@ import csv
 #want name, definition, text and synonym (no synonym in this example)
 def CreateOutputList(json_dict):
 	outputList = []
-	mini_dict = json_dict['results'][0]
-	outputList.append(mini_dict['name'])
-	outputList.append(mini_dict['definition']['text'])
-	synonym = mini_dict.get('synonyms', "NULL")
+	#mini_dict = json_dict['results'][0]
+	outputList.append(json_dict['name'])
+	outputList.append(json_dict['definition']['text'])
+	synonym = json_dict.get('synonyms', "NULL")
 	if synonym != "NULL":
-    		outputList.append(mini_dict['synonyms'][0]['name'])
+    		outputList.append(json_dict['synonyms'][0]['name'])
 	return outputList
 
 #############
@@ -40,18 +40,25 @@ def ListToCsv( myList, ofstream ):
 
 #################
 #######CONVERT JSON TO DICT
-#################3
-json_file = open("json_data.txt")
+##################
+json_file = open("json_of_unique_ids.txt")
 json_str = json_file.readline()
-ofstream = open("GOIdInfo.csv", 'w')
+ofstream = open("GOIdInfo.tsv", 'w')
+i = 0
 while json_str:
+	#r = re.search(r'{"id":.*"usage".*}', json_str)
+	r = re.search(r'{"id":.*"usage"(.){0,20}}', json_str)
+	json_str = r.group(0)
 	json_dict = json.loads(json_str)
 	outputList = CreateOutputList(json_dict)
 	ListToCsv(outputList, ofstream)
 	json_str = json_file.readline()
+	i += 1
+	#print(i)
 ofstream.close()
 of = open("GOIdInfo.csv", 'r')
 mystr = of.read()
-print(mystr)
+#print(mystr)
 ofstream.close()
 json_file.close()
+
