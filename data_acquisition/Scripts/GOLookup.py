@@ -1,13 +1,24 @@
 #!/usr/bin/env python
 import sys
+import re
 import requests
 import argparse
 
 
-def RetrieveGOData(goid, readable):
-	pre_query = "https://www.ebi.ac.uk/QuickGO/services/ontology/go/terms/"
-	query_id = goid.replace(":", "%3A")
-	full_query = pre_query + query_id + "/complete"
+
+def RetrieveGOData(goid, readable, l = False):
+	if l:
+		pre_query = "https://www.ebi.ac.uk/QuickGO/services/ontology/go/terms/"
+		full_post_query = ""
+		for t in goid:
+			query_id = t.replace(":", "%3A")
+			full_post_query = full_post_query + query_id + "%2C"
+		full_query = pre_query + full_post_query[0:-3]
+		
+	else:
+		pre_query = "https://www.ebi.ac.uk/QuickGO/services/ontology/go/terms/"
+		query_id = goid.replace(":", "%3A")
+		full_query = pre_query + query_id + "/complete"
 
 	r = requests.get(full_query, headers = {"Accept" : "application/json"})
 	if not r.ok:
@@ -21,7 +32,7 @@ def RetrieveGOData(goid, readable):
 		name =  parsed_json["results"][0]["name"]
 		definition = parsed_json["results"][0]["definition"]["text"]
 		outfile.write("GO ID:\n" ,'\t', id)
-		#print ("GO ID:\n" ,'\t', id)
+		print ("GO ID:\n" ,'\t', id)
 		outfile.write("Name:\n", '\t', name)
 		#print ("Name:\n", '\t', name)
 		outfile.write("Definition:\n", '\t', definition)
@@ -39,7 +50,11 @@ def RetrieveGOData(goid, readable):
 			
 		#should be parsed_json["results"][0]["name"]
 	else:
-		outfile.write(r.text)
+		if l:
+			print_out = re.sub(r"(\"usage\":\"[^}]*\"}),({\"id\")", r"\1\n\2", str(r.text))
+			outfile.write(print_out)
+			#print(print_out)
+		else: outfile.write(r.text)
 		#print(r.text)
 
 
@@ -48,7 +63,9 @@ if __name__ == "__main__":
 	p = argparse.ArgumentParser()
 	p.add_argument("go_id", nargs='*', help = "Enter the GO_ID(s) you would like to lookup. A list of space-separated terms is also acceptable")
 	p.add_argument("-f", "--go_id_file", help = "A file containing a list of newline separated GO_terms to look up")
+	p.add_argument("-o", "--output_file", help = "The file name for the output file. If not included, it will be json_data.txt")
 	p.add_argument("-r", "--human_readable", action = "store_true", help = "Specify if you would like stuff printed in user friendly fashion")
+	p.add_argument("-n", "--number", default = 4, help = "Number of GO Ids to query at once")
 	args = p.parse_args()
 
 	if len(args.go_id) == 0 and args.go_id_file == None:
@@ -61,21 +78,25 @@ if __name__ == "__main__":
 			RetrieveGOData(goid, args.human_readable)
 			print()
 	if args.go_id_file:
-		outfile = open("json_data.txt", 'w')
+		if args.output_file:
+			outfile = open(args.output_file, 'w')
+		else: outfile = open("json_data.txt", 'w') #CHANGE FILE NAME HERE
 		counter = 0
 		with open(args.go_id_file, "r") as go_in:
+			query_list = []
 			for line in go_in:
 				counter+=1
-				if counter == 101:
-					break
-				print("Line: "+str(counter))
-				if "GO" in line:
-					RetrieveGOData(line.strip(), args.human_readable)
-					outfile.write('\n')
-					#print()
-				else:
-					print("File in has invalid terms. Please try again")
-					sys.exit()
-				
+				if counter >= 23999:
+					#break
+					print("Line: "+str(counter))
+					if "GO" in line:
+						query_list.append(line.strip())
+					else:
+						print("File in has invalid terms. Please try again")
+						sys.exit()
+					if len(query_list) >= int(args.number):
+						RetrieveGOData(query_list, args.human_readable, l = True)
+						outfile.write('\n')
+						query_list = []	
 		go_in.close()
 		outfile.close()
