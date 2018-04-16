@@ -56,9 +56,6 @@ while json_str:
 	i += 1
 	#print(i)
 ofstream.close()
-of = open("GOIdInfo.csv", 'r')
-mystr = of.read()
-#print(mystr)
 ofstream.close()
 json_file.close()
 
