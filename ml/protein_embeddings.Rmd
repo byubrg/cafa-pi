@@ -1,0 +1,99 @@
+---
+title: "Protein Function Embeddings"
+author: "Jonathan Dayton"
+date: "4/17/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load("tidyverse", "tidytext", "reticulate")
+reticulate::use_condaenv("py36")
+```
+
+## Load word vectors
+
+```{r}
+word_vecs <- read_table2("~/Documents/datasets/cafa-pi/50iterations.txt", 
+                         col_names = c("word", paste("dim", 1:50, sep="")))
+
+```
+
+## Fix the raw JSON file
+
+There are some issues with the formatting of the JSON file.  Let's get rid of them.
+
+Note that for some reason, we need an absolute path for reticulate's Python
+
+```{python}
+import json
+import re
+import pandas as pd
+
+pattern = (
+    # Every few lines, we have this "numberOfHits" thing
+    r'\{"numberOfHits":\d+,"results":\['
+    # And then occationally, we have this "pageInfo" thing
+    '|\],"pageInfo":null\}'
+)
+
+objs = []
+with open("/home/jdayton3/Documents/datasets/cafa-pi/json_of_unique_ids.txt", "r") as infile:
+    for line in infile:
+        objs.append(json.loads(re.sub(pattern, "", line)))
+
+go_definitions = pd.DataFrame(data={
+    "GO_ID": [obj['id'] for obj in objs],
+    "definition": [obj['definition']['text'] for obj in objs]
+})
+```
+
+We should now have a dataframe that we can use.
+
+```{r}
+defs <- py$go_definitions %>% as_tibble()
+defs %>% head()
+```
+
+Now let's tokenize the definitions & remove stop words
+
+```{r}
+data("stop_words")
+
+tokens <- defs %>%
+  unnest_tokens(word, definition) %>%
+  anti_join(stop_words)
+tokens
+```
+
+Let's inner join the tokens with our GloVe vectors and see whether we lose some tokens / how many we lose.
+
+```{r}
+token_vecs <- tokens %>% inner_join(word_vecs)
+
+(tokens %>% nrow()) - 
+    (token_vecs %>% nrow())
+
+(tokens %>% distinct(GO_ID) %>% nrow()) - 
+    (token_vecs %>% distinct(GO_ID) %>% nrow())
+```
+
+Yikes, we're losing about 28,000 of our 346,000 rows from the tokens, probably due to some preprocessing steps in the way we ran GloVe.  Luckily though, we're not losing any GO IDs completely, so we should be able to generate a vector embedding for each ontology.  (Note: investigate which tokens we're losing, distribution per GO ID, etc.)
+
+## Making the vectors
+
+Here we just group by GO ID and take a mean of all of the token vectors.  There are probably numerous ways we could improve on this (a weighted mean, some other vectorization method that takes word order into account, etc.).  But anyways, here we go:
+
+```{r}
+go_vecs <- token_vecs %>% 
+  select(-word) %>% 
+  group_by(GO_ID) %>% 
+  summarize_all(funs(mean))
+```
+
+It would be really cool to plot these vectors and see whether the closely related ones group together.  But for now, we'll just save them and call it good!
+
+```{r}
+go_vecs %>% write_csv("../data/parsed/go_embeddings.csv")
+```

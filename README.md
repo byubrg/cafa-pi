@@ -10,6 +10,8 @@ To install Python dependencies with pip, run:
 
 ```bash
 pip3 install pandas tensorflow sklearn
+# Dask needs to be upgraded for tensorflow to work
+pip3 install dask --upgrade
 ```
 
 ## Generating the parsed data
@@ -45,7 +47,7 @@ This data isn't actually useful for training a model, but may be useful in testi
 To generate the simulated data, run the following from the project root:
 
 ```bash
-python3 ml/simulate_data.py
+python3 -m ml.simulate_data
 ```
 
 The data can then be found in `{project root}/data/example/train_simulated.csv`.

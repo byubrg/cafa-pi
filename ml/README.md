@@ -8,6 +8,10 @@
     - to get a rough draft of a working model
     - TensorFLow: good visualization
 - Next Steps
-    - write a recurrent neural network
-    - try model on more than 2 classes
-    - run on bigger dataset
+    1. Model output probabilities (Jon)
+    2. HDF5 storage/retrieval (Kimball)
+    3. Fix validation set split (Kimball)
+    4. Make RNN (GRU) (Jon)
+    5. Optimize CNN (Erica)
+    - Non-padded sequences
+    - Make binary classifier
