@@ -1,0 +1,55 @@
+---
+title: "Generate Binary Datasets"
+author: "Jonathan Dayton"
+date: "4/18/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load("tidyverse", "reticulate")
+```
+
+## Set variables
+
+```{r}
+biofilm <- c("GO:0042710")
+motility <- c("GO:0001539")
+majority_class <- c("GO:0005634")
+# Longest biofilm ~2300, longest motility ~800
+max_length = 2500
+#path = "../data/parsed/cafa3.csv"
+path = "../data/parsed/training.csv"
+```
+
+## Load data
+
+```{r}
+df <- read_csv(path)
+head(df)
+```
+
+## Get rid of long sequences
+
+```{r}
+nrow(df)
+df <- df %>% filter(str_length(Sequence) <= max_length)
+nrow(df)
+```
+
+## Assign -1 or 1 based on function of interest
+
+```{r}
+df_biofilm <- df %>% mutate(Target=if_else(GO_ID %in% biofilm, 1.0, -1.0)) %>% select(CAFA_ID, GO_ID, Sequence, Target)
+df_motility <- df %>% mutate(Target=if_else(GO_ID %in% motility, 1.0, -1.0)) %>% select(CAFA_ID, GO_ID, Sequence, Target)
+df_majority <- df %>% 
+  mutate(Target=if_else(GO_ID %in% majority_class, 1.0, -1.0)) %>%
+  select(CAFA_ID, GO_ID, Sequence, Target)
+```
+
+## Oops, there is only 1 biofilm and 0 motility.  So let's use a majority class & save it.
+
+```{r}
+# df_majority %>% write_csv("../data/parsed/cafa3/majority.csv")
+```
