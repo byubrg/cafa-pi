@@ -152,27 +152,37 @@ class H5pyDao:
     def load_data(self, in_file, out_file):
         seen = set()
         seqs = []
+        count = 0
         for chunk in pd.read_csv(in_file, chunksize=self.__chunk_size):
+            count += 1
+            print(f"Looking at chunk {count}")
             for _, row in chunk.iterrows():
                 seq = row['Sequence']
                 if seq not in seen:
                     seen.add(seq)
                     seqs.append(seq)
+        print("done with the chunks.")
         max_len = max([len(seq) for seq in seqs])
-        targets = np.array(get_labels(in_file))
+        print(f"max_len: {max_len}")
+        targets = np.array(get_labels(in_file)) # TODO: we run out of memory here.
+        print("got targets.")
         with h5py.File(out_file, "w") as f:
             f.create_dataset('attributes', shape=(0, max_len, 20), maxshape=(None, None, None))
             f.create_dataset('labels', data=targets)
+        print("created datasets")
         i = 0
         while i < len(seqs):
             if i + self.__chunk_size < len(seqs):
+                print("gonna grab a chunk")
                 data_encodings = np.array([one_hot_seq(seq, max_len) for seq in seqs[i:i + self.__chunk_size]])
+                print("got one")
             else:
                 data_encodings = np.array([one_hot_seq(seq, max_len) for seq in seqs[i:]])
             with h5py.File(out_file, "a") as f:
                 f["attributes"].resize((f["attributes"].shape[0] + data_encodings.shape[0]), axis=0)
                 f["attributes"][-data_encodings.shape[0]:] = data_encodings
             i += self.__chunk_size
+            print(f"loaded {i} so far...")
 
 
 if __name__ == "__main__":

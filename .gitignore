@@ -9,3 +9,5 @@ target.*.csv
 *.Rproj
 .Rhistory
 *.html
+data/parsed/cafa3
+*.h5
